@@ -76,7 +76,24 @@ y = yaux(y,:);
 % Regularized
 J = (1/m).*sum(sum((-y).*log(h)-(1-y).*log(1-h))) + lambda/(2*m).*(sum(sum(Theta1(:,2:end).^2))+(sum(sum(Theta2(:,2:end).^2))));
 
+% Part 2
+final_delta2 = 0;
+final_delta3 = 0;
 
+delta_3 = h - y;
+z2 = [ones(m,1) z2];
+delta_2 = delta_3*Theta2.*sigmoidGradient(z2);
+delta_2 = delta_2(:,2:end);
+final_delta2 = final_delta2 + delta_2'*X;
+final_delta3 = final_delta3 + delta_3'*a2;
+%final_delta3 = final_delta3 + delta_3'*a2;
+
+Theta1_grad = 1/m.*final_delta2;
+Theta2_grad = 1/m.*final_delta3;
+
+%Part 3
+Theta1_grad(:, 2:end) = Theta1_grad(:, 2:end) + lambda / m * Theta1(:, 2:end);
+Theta2_grad(:, 2:end) = Theta2_grad(:, 2:end) + lambda / m * Theta2(:, 2:end);
 
 
 
